@@ -4,6 +4,7 @@
  const dotenv = require('dotenv');
  const cors = require('cors');
  
+ 
  dotenv.config();
 
 
@@ -26,10 +27,28 @@
  });
 
 
- //use authentication routes
+ //use routes
  app.use('/api/auth', require('./routes/authRoutes'));
- //use event routes
  app.use('/api/events', require('./routes/eventRoutes'));
+
+
+ // setup socket.io for real-time updates
+
+ const io = require('socket.io')(server, {
+   cors: {
+     origin: '*',
+     methods: ['GET', 'POST'],
+   },
+ });
+
+ io.on('connection', (socket) => {
+    console.log('New client connected', socket.id);
+    socket.on('disconnect', () => {
+      console.log('Client disconnected', socket.id);
+    });
+ });
+
+ app.set('io', io);
 
 
  //listen to port

@@ -1,4 +1,4 @@
- // routes/eventRoutes.js
+// routes/eventRoutes.js
  const express = require('express');
  const router = express.Router();
  const eventController = require('../controllers/eventController');
@@ -21,6 +21,12 @@
  
  //route for deleting an event
  router.delete('/delete/:id', authMiddleware, eventController.deleteEvent);
+
+ //route for adding attendees to an event
+ router.put('/add/:id', authMiddleware, eventController.addAttendee);
+
+ // Self-registration route (protected to ensure we have user info)
+ router.post('/join/:id', authMiddleware, eventController.joinEvent);
 
  
  module.exports = router;
